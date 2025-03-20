@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id
+  password String
+  files    File[]
+
+  @@map("user")
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  name       String
+  extension  String
+  mimeType   String   @map("mime_type")
+  size       Int
+  uploadDate DateTime @map("upload_date")
+  fullName String @map("full_name")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("file")
+}
